@@ -1,0 +1,3 @@
+"0","dados %>% "
+"0","    ggplot(aes(x = like, y = fun, color = like)) + "
+"0","    geom_point(size = .5, alpha = .4, position = ""jitter"")"

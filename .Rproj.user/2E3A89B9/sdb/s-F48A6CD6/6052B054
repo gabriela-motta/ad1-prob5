@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"Prob 5, CP 1: Regressão e romance\"\noutput:\n  html_document:\n    code_folding: hide\n    toc: yes\n    toc_float: yes\n  html_notebook:\n    toc: yes\n    toc_float: yes\n---\n\n```{r setup, include=FALSE}\nknitr::opts_chunk$set(echo = TRUE)\n```\n\n```{r}\ndados = read.csv(\"speed-dating.csv\")\ndados = dados %>% filter(complete.cases(dados)) \n```\n\n```{r}\ndados %>% \n    ggplot(aes(x = like, y = fun, color = like)) + \n    geom_point(size = .5, alpha = .4, position = \"jitter\")\n```\n\n```{r}\nmodelo = lm(like ~ fun + intel, \n               data = dados)\n\ntidy(modelo)\n```\n\n```{r}\nglance(modelo)\n```",
+    "created" : 1532604813609.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3923140539",
+    "id" : "6052B054",
+    "lastKnownWriteTime" : 1532608073,
+    "last_content_update" : 1532608073388,
+    "path" : "~/Área de Trabalho/AD1/ad1-prob5/cp1.Rmd",
+    "project_path" : "cp1.Rmd",
+    "properties" : {
+        "last_setup_crc32" : "1D82E846bb338d19",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

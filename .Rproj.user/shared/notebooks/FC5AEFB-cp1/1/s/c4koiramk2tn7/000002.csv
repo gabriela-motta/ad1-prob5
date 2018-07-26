@@ -1,0 +1,7 @@
+"0","```r
+sumarios = dados %>% 
+    group_by(week_day, language) %>%
+    summarise(media = mean(users))
+sumarios$week_day <- factor(sumarios$week_day, levels=c(\"segunda-feira\", \"terça-feira\",\"quarta-feira\",
+                                                        \"quinta-feira\", \"sexta-feira\", \"sábado\", \"domingo\"))
+```"

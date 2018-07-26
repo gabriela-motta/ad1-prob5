@@ -1,0 +1,9 @@
+"0","```r
+dados %>% 
+  group_by(weekend, language) %>%
+  summarise(media = mean(users)) %>%
+  filter(weekend == TRUE) %>%
+  ggplot(aes(x = weekend, y = media, fill = language)) + 
+  geom_bar(stat = \"identity\", position = \"dodge\", width = 0.2) +
+  labs(fill =\"Linguagem\", x = \"Fim de Semana\", y = \"Quantidade de Usuários\")
+```"

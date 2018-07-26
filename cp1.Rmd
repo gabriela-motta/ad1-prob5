@@ -1,0 +1,37 @@
+---
+title: "Prob 5, CP 1: Regressão e romance"
+output:
+  html_document:
+    code_folding: hide
+    toc: yes
+    toc_float: yes
+  html_notebook:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+dados = read.csv("speed-dating.csv")
+dados = dados %>% filter(complete.cases(dados)) 
+```
+
+```{r}
+dados %>% 
+    ggplot(aes(x = like, y = fun, color = like)) + 
+    geom_point(size = .5, alpha = .4, position = "jitter")
+```
+
+```{r}
+modelo = lm(like ~ fun + intel, 
+               data = dados)
+
+tidy(modelo)
+```
+
+```{r}
+glance(modelo)
+```

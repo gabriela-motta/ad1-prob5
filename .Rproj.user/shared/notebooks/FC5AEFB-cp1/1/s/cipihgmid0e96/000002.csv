@@ -1,0 +1,7 @@
+"0","```r
+sumarios %>% 
+  ggplot(aes(x = week_day, y = media, color = language)) + 
+  geom_point() +
+  facet_grid(language ~.) +
+  labs(color =\"Linguagem\", x = \"Dia da Semana\", y = \"Quantidade de Usuários\")
+```"
