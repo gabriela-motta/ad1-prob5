@@ -12,26 +12,103 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(viridis)
+library(knitr)
+library(broom)
+library(modelr)
 ```
 
-```{r}
+## Dados
+Temos dados descrevendo 5000 encontros relâmpagos envolvendo 310 jovens americanos. Os dados originais foram coletados por professores da Columbia Business School.
+Os participantes tinham vários encontros de 4 minutos por noite. Após cada um, preenchiam fichas avaliando aqueles com quem se encontraram. Cada linha nos dados representa um desses encontros.
+As informações na ficha representavam dados pessoais como idade e gênero, e opiniões do participante sobre a pessoa com quem ele se encontrou, além de avaliações sobre um possível relacionamento entre eles.
+Para a análise vamos utilizar os dados like (O quanto p1 gostou de p2), fun (Quão divertido p1 achou p2), attr (Quão atraente p1 achou p2) e amb (Quão ambicioso p1 achou p2), todas na escala de 0 a 10.
+Algumas linhas precisam ser filtradas para eliminar dados N/A, que ocorrem quando um participante não preencheu devidamente essa informação na ficha.
+
+### Pergunta
+Utilizando esses dados, vamos criar modelos de regressão para responder à seguinte pergunta: **uma pessoa divertida (fun) e atraente (attr) recebe maiores notas de like?**
+
+```{r include=FALSE}
 dados = read.csv("speed-dating.csv")
-dados = dados %>% filter(complete.cases(dados)) 
+dados = dados %>% filter(!is.na(like)) %>%
+                  filter(!is.na(fun)) %>%
+                  filter(!is.na(attr)) %>%
+                  filter(!is.na(amb))
 ```
+
+Para visualizar melhor, vamos plotar as variáveis fun e attr em função de like.
 
 ```{r}
 dados %>% 
     ggplot(aes(x = like, y = fun, color = like)) + 
-    geom_point(size = .5, alpha = .4, position = "jitter")
+    geom_count() +
+    labs(x = "O quanto p1 gostou de p2", y = "Quão divertido p1 achou p2", color = "O quanto p1 gostou de p2", size = "Quantidade de p1")
 ```
 
 ```{r}
-modelo = lm(like ~ fun + intel, 
+dados %>% 
+    ggplot(aes(x = like, y = attr, color = like)) + 
+    geom_count() +
+    labs(x = "O quanto p1 gostou de p2", y = "Quão atraente p1 achou p2", color = "O quanto p1 gostou de p2", size = "Quantidade de p1")
+```
+
+Em ambos os gráficos é possível visualizar uma certa relação entre as variáveis.
+
+## Modelo
+
+### amb
+
+Para termos uma ideia do comportamento de um modelo de regressão, vamos utilizar a variável amb.
+```{r}
+modelo1 = lm(like ~ amb, 
                data = dados)
 
-tidy(modelo)
+kable(tidy(modelo1))
 ```
 
 ```{r}
-glance(modelo)
+kable(glance(modelo1))
 ```
+
+Esse modelo possui um R² muito baixo, portanto a variável amb não explica muito bem a variável like.
+
+```{r}
+dados %>% 
+    add_predictions(model = modelo1) %>% 
+    ggplot(aes(x = amb, y = like)) + 
+    geom_count() + 
+    geom_line(aes(y = pred), colour = "red") + 
+    labs(x = "Quão ambicioso p1 achou p2", y = "O quanto p1 gostou de p2", size = "Quantidade de p1") +
+    NULL
+
+```
+
+
+
+### fun + attr
+```{r}
+modelo = lm(like ~ fun + attr, 
+               data = dados)
+
+kable(tidy(modelo))
+```
+
+```{r}
+kable(glance(modelo))
+```
+
+Com um R² mais elevado, podemos dizer que essas variáveis realmente possuem uma relação forte.
+
+```{r}
+dados %>% 
+    add_predictions(model = modelo) %>% 
+    ggplot(aes(x = fun, y = like, color = attr)) + 
+    geom_count() + 
+    geom_smooth(method = lm, color = "red") +
+    labs(x = "O quanto p1 gostou de p2", y = "Quão divertido p1 achou p2", color = "Quão atraente p1 achou p2", size = "Quantidade de p1") +
+    NULL
+```
+
+Portanto, respondendo à nossa pergunta, temos que o fato da pessoa ser atraente e divertida aumenta a nota que ela recebe no like.
