@@ -1,3 +1,0 @@
-"0","modelo = lm(like ~ fun + intel, "
-"0","               data = dados)"
-"0","tidy(modelo)"

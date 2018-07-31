@@ -72,7 +72,7 @@ kable(tidy(modelo1))
 kable(glance(modelo1))
 ```
 
-Esse modelo possui um R² muito baixo, portanto a variável amb não explica muito bem a variável like.
+Esse modelo possui um R² muito baixo, portanto esse modelo explica apenas 17% da variabilidade da variável like.
 
 ```{r}
 dados %>% 
@@ -99,7 +99,7 @@ kable(tidy(modelo))
 kable(glance(modelo))
 ```
 
-Com um R² mais elevado, podemos dizer que essas variáveis realmente possuem uma relação forte.
+Com um R² mais elevado, podemos dizer que o modelo com essas variáveis explica 57% da variabilidade da variável like.
 
 ```{r}
 dados %>% 

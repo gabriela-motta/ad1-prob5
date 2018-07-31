@@ -1,2 +1,0 @@
-"0","dados = read.csv(""speed-dating.csv"")"
-"0","dados = dados %>% filter(complete.cases(dados)) "
